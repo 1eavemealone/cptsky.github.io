@@ -1,2 +1,94 @@
 <p>Siya "Hello Dubai"</p>
 <p>Ako "Bye Dai"</p>
+
+
+<p>GAME</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<Style>
+		tr th{
+			background-color: red; 
+		}
+		tbody{
+     height: auto;
+     min-height:10px;
+     display:block;
+    }
+    table{
+    	border: 1px solid black;
+    }
+	</Style>
+</head>
+<body>
+
+<div><input type="text" id="header-name"> <span class="add-header">Add Header</span></div>
+
+<div><input type="text" id="names"> <span class="add">Add content</span></div>
+
+<table id="subsortsortable">
+    <tbody class="content"></tbody>
+</table>
+
+
+
+<script type="text/javascript">
+
+function sort(){
+	$( ".content" ).sortable();
+	$( ".content" ).disableSelection();
+	$( ".subcontent" ).sortable({
+		connectWith:['.subcontent'],
+		update: function(){
+		var thisloc = $(this).parent().find('.total');
+			var headertotal = 0;
+			$(this).parent().find('.price').each(function(){
+				var price = $(this).text();
+				headertotal += parseInt(price);
+				$(thisloc).text(headertotal);
+			});
+		},
+		stop: function(){
+			if($(this).is(':empty'))
+			$(this).parent().find('.total').text('0.00');
+		} 
+	});
+	$( ".subcontent" ).disableSelection();
+
+}
+
+
+$('.add-header').on('click',function(){
+    var header = $(this).parent().find('#header-name').val();
+    $('tbody.content').prepend('<tr><td><table><th id="groups">'+header+' <label class="total">0.00</label></th><tbody class="subcontent"></tbody></table></td></tr>');
+    sort();
+})
+
+$('.add').on('click',function(){
+	if($('tbody.content').is(':empty')){
+		$('tbody.content').prepend('<tr><td><table><th id="groups">HEADER 1 <label class="total">0.00</label></th><tbody class="subcontent"></tbody></table></td></tr>');
+		var name = $(this).parent().find('#names').val();
+    	$('tbody.subcontent:first').prepend('<tr><td><label class="price">'+name+'</label></td></tr>');
+
+	}
+	else{
+		var name = $(this).parent().find('#names').val();
+    	$('tbody.subcontent:first').prepend('<tr><td><label class="price">'+name+'</label></td></tr>');
+	}
+	sort();
+	var thisloc = $('tbody.subcontent:first').parent().find('.total');
+	var headertotal = 0;
+	$('tbody.subcontent:first').find('.price').each(function(){
+		var price = $(this).text();
+		headertotal += parseInt(price);
+		$(thisloc).text(headertotal);
+	})
+	
+})
+</script>
+
+</body>
+</html>
